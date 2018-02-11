@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.brend.serialsnow.viewmodels.MainViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/colorPrimary"
+        tools:context="com.brend.serialsnow.views.MainActivity">
+
+        <include layout="@layout/action_bar" />
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/sliding_tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewModel.isLoading || viewModel.categories.value.isEmpty() ? View.GONE : View.VISIBLE}"
+                app:tabMode="fixed">
+
+            </android.support.design.widget.TabLayout>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewModel.isLoading || viewModel.categories.value.isEmpty() ? View.GONE : View.VISIBLE}">
+
+                <android.support.v4.view.PagerTabStrip
+                    android:id="@+id/page_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorPrimary"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="4dp"
+                    android:textColor="@android:color/white">
+
+                </android.support.v4.view.PagerTabStrip>
+
+            </android.support.v4.view.ViewPager>
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewModel.isLoading || viewModel.categories.value.isEmpty() ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
+</layout>

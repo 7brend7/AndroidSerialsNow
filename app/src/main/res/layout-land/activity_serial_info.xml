@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.brend.serialsnow.viewmodels.SerialInfoViewModel" />
+
+        <variable
+            name="serialInfo"
+            type="com.brend.serialsnow.models.SerialInfo" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical"
+
+        tools:context="com.brend.serialsnow.views.SerialInfoActivity">
+
+        <include layout="@layout/action_bar" />
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{viewModel.isLoading ? View.GONE : View.VISIBLE}">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical">
+
+                <com.google.android.flexbox.FlexboxLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:alignContent="flex_start"
+                    app:alignItems="flex_start">
+
+                    <ImageView
+                        android:id="@+id/info_image"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true" />
+
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_flexGrow="1"
+                        android:layout_marginStart="20dp">
+
+                        <TextView
+                            android:id="@+id/kinopoisk_lbl"
+                            android:layout_width="90dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/kinopoisk_lbl"
+                            android:textColor="@android:color/white"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/kinopoisk_val"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{serialInfo.KINOPOISK}"
+                            android:textColor="@android:color/white"
+                            app:layout_constraintStart_toEndOf="@+id/kinopoisk_lbl"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="0.0" />
+
+                        <TextView
+                            android:id="@+id/imdb_lbl"
+                            android:layout_width="90dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/imdb_lbl"
+                            android:textColor="@android:color/white"
+                            app:layout_constraintStart_toStartOf="@+id/kinopoisk_lbl"
+                            app:layout_constraintTop_toBottomOf="@+id/kinopoisk_lbl" />
+
+                        <TextView
+                            android:id="@+id/imdb_val"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="@{serialInfo.IMDB}"
+                            android:textColor="@android:color/white"
+                            app:layout_constraintStart_toEndOf="@+id/imdb_lbl"
+                            app:layout_constraintTop_toBottomOf="@+id/kinopoisk_val"
+                            tools:text="0.0" />
+
+                        <TextView
+                            android:id="@+id/year_lbl"
+                            android:layout_width="90dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/year_lbl"
+                            android:textColor="@android:color/white"
+                            app:layout_constraintStart_toStartOf="@+id/imdb_lbl"
+                            app:layout_constraintTop_toBottomOf="@+id/imdb_lbl" />
+
+                        <TextView
+                            android:id="@+id/year_val"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="@{serialInfo.YEAR}"
+                            android:textColor="@android:color/white"
+                            app:layout_constraintStart_toEndOf="@+id/year_lbl"
+                            app:layout_constraintTop_toBottomOf="@+id/imdb_val"
+                            tools:text="2018" />
+
+                        <TextView
+                            android:id="@+id/country_lbl"
+                            android:layout_width="90dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/country_lbl"
+                            android:textColor="@android:color/white"
+                            app:layout_constraintStart_toStartOf="@+id/year_lbl"
+                            app:layout_constraintTop_toBottomOf="@+id/year_lbl" />
+
+                        <TextView
+                            android:id="@+id/country_val"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="@{serialInfo.COUNTRY}"
+                            android:textColor="@android:color/white"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/country_lbl"
+                            app:layout_constraintTop_toBottomOf="@+id/year_val"
+                            tools:text="USA" />
+
+                        <Space
+                            android:id="@+id/text_space"
+                            android:layout_width="0dp"
+                            android:layout_height="5dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/country_val" />
+
+                        <TextView
+                            android:id="@+id/genre_lbl"
+                            android:layout_width="90dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/genre_lbl"
+                            android:textColor="@android:color/white"
+                            app:layout_constraintStart_toStartOf="@+id/country_lbl"
+                            app:layout_constraintTop_toBottomOf="@+id/text_space" />
+
+                        <TextView
+                            android:id="@+id/genre_val"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@{serialInfo.GENRE}"
+                            android:textColor="@android:color/white"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/genre_lbl"
+                            app:layout_constraintTop_toBottomOf="@+id/text_space"
+                            tools:text="drama" />
+
+                        <Space
+                            android:id="@+id/text_space2"
+                            android:layout_width="0dp"
+                            android:layout_height="15dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/genre_val" />
+
+                        <TextView
+                            android:id="@+id/description"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@{serialInfo.DESCRIPTION}"
+                            android:textColor="@android:color/white"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/text_space2"
+                            tools:text="Serial description" />
+
+                    </android.support.constraint.ConstraintLayout>
+
+                </com.google.android.flexbox.FlexboxLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:textColor="@android:color/white"
+                    tools:text="Choose translation:"
+                    android:text="@string/choose_translation_text" />
+
+                <com.google.android.flexbox.FlexboxLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <Spinner
+                        android:id="@+id/translation_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_flexBasisPercent="50%"
+                        android:backgroundTint="@android:color/white" />
+
+                    <Spinner
+                        android:id="@+id/season_spinner"
+                        android:layout_width="match_parent"
+                        app:layout_flexBasisPercent="25%"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@android:color/white" />
+
+                    <Spinner
+                        android:id="@+id/episode_spinner"
+                        android:layout_width="match_parent"
+                        app:layout_flexBasisPercent="25%"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@android:color/white" />
+
+
+
+                </com.google.android.flexbox.FlexboxLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/play_btn"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/roundcorner"
+                        android:src="@drawable/ic_play_arrow_black_24dp"
+                        android:tint="@android:color/white"/>
+
+                    <ImageButton
+                        android:id="@+id/openInPlayer_btn"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="24dp"
+                        android:background="@drawable/roundcorner"
+                        android:src="@drawable/ic_launch_black_24dp"
+                        android:tint="@android:color/white"/>
+
+                </LinearLayout>
+
+
+
+                <android.support.v4.widget.Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+</layout>

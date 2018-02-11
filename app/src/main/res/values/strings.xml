@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SerialsNow</string>
+    <string name="title_text">Serials Now</string>
+    <string-array name="tab_titles">
+        <item>Популярное за сегодня</item>
+        <item>Популярное за месяц</item>
+        <item>Популярное за год</item>
+        <item>Обновления</item>
+    </string-array>
+    <string name="serials_repository_api_error">Не удается получить или проанализировать данные</string>
+    <string name="no_internet_title">"Нет соединения с интернетом"</string>
+    <string name="no_internet_message">Для использования приложения необходимы мобильные данные или Wi-Fi. Нажмите ОК, чтобы продолжить.</string>
+    <string name="kinopoisk_lbl">Кинопоиск:</string>
+    <string name="imdb_lbl">IMDB:</string>
+    <string name="year_lbl">Год:</string>
+    <string name="country_lbl">Страна:</string>
+    <string name="genre_lbl">Жанр:</string>
+    <string name="choose_translation_text">Выберите перевод:</string>
+    <string name="season_key">%1$s сезон</string>
+    <string name="episode_key">%1$s серия</string>
+</resources>
