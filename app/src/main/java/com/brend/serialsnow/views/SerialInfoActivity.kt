@@ -85,6 +85,7 @@ class SerialInfoActivity : AppCompatActivity() {
 
         viewModel.translation.observe(this, Observer<String> {
             buildTranslationLists(this, SPINNER_TYPE_SEASON)
+            buildTranslationLists(this, SPINNER_TYPE_EPISODE)
         })
 
         viewModel.season.observe(this, Observer<String> {
@@ -196,6 +197,8 @@ class SerialInfoActivity : AppCompatActivity() {
                                         binding.viewModel?.translationToken?.set(value)
                                     }
                                 }
+
+                                break
                             }
                         }
 
