@@ -37,7 +37,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.brend.serialsnow.views.SerialInfoActivity" />
         </activity>
+        <activity
+            android:name=".views.FavoriteActivity"
+            android:parentActivityName=".views.MainActivity">
 
+        </activity>
     </application>
 
 </manifest>

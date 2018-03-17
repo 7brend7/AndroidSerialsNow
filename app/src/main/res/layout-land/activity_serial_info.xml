@@ -30,6 +30,7 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            tools:visibility="gone"
             android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}">
 
             <ProgressBar
@@ -68,8 +69,8 @@
                     <android.support.constraint.ConstraintLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_flexGrow="1"
-                        android:layout_marginStart="20dp">
+                        android:layout_marginStart="20dp"
+                        app:layout_flexGrow="1">
 
                         <TextView
                             android:id="@+id/kinopoisk_lbl"
@@ -205,68 +206,103 @@
 
                 </com.google.android.flexbox.FlexboxLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:textColor="@android:color/white"
-                    tools:text="Choose translation:"
-                    android:text="@string/choose_translation_text" />
-
                 <com.google.android.flexbox.FlexboxLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp">
 
-                    <Spinner
-                        android:id="@+id/translation_spinner"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="vertical"
                         app:layout_flexBasisPercent="50%"
-                        android:backgroundTint="@android:color/white" />
+                        android:layout_marginEnd="10dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/white"
+                            android:layout_marginBottom="5dp"
+                            tools:text="Translation:"
+                            android:text="@string/translation_lbl"/>
+                        <Spinner
+                            android:id="@+id/translation_spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/round_corner_spinner" />
+                    </LinearLayout>
 
-                    <Spinner
-                        android:id="@+id/season_spinner"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        app:layout_flexBasisPercent="25%"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@android:color/white" />
+                        android:orientation="vertical"
+                        app:layout_flexBasisPercent="25%"
+                        android:layout_marginEnd="10dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/white"
+                            android:layout_marginBottom="5dp"
+                            tools:text="Season:"
+                            android:text="@string/season_lbl"/>
+                        <Spinner
+                            android:id="@+id/season_spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/round_corner_spinner" />
+                    </LinearLayout>
 
-                    <Spinner
-                        android:id="@+id/episode_spinner"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        app:layout_flexBasisPercent="25%"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@android:color/white" />
-
-
+                        android:orientation="vertical"
+                        app:layout_flexBasisPercent="25%">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/white"
+                            android:layout_marginBottom="5dp"
+                            tools:text="Episode:"
+                            android:text="@string/episode_lbl"/>
+                        <Spinner
+                            android:id="@+id/episode_spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/round_corner_spinner" />
+                    </LinearLayout>
 
                 </com.google.android.flexbox.FlexboxLayout>
 
-                <LinearLayout
+                <com.google.android.flexbox.FlexboxLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    app:flexWrap="wrap"
+                    android:layout_marginTop="16dp">
 
-                    <ImageButton
-                        android:id="@+id/play_btn"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:background="@drawable/roundcorner"
-                        android:src="@drawable/ic_play_arrow_black_24dp"
-                        android:tint="@android:color/white"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_flexBasisPercent="50%"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="end|center_vertical">
+
+                        <ImageButton
+                            android:id="@+id/play_btn"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginEnd="5dp"
+                            android:background="@drawable/roundcorner"
+                            android:src="@drawable/ic_play_arrow"/>
+                    </LinearLayout>
 
                     <ImageButton
                         android:id="@+id/openInPlayer_btn"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:layout_marginStart="24dp"
                         android:background="@drawable/roundcorner"
-                        android:src="@drawable/ic_launch_black_24dp"
-                        android:tint="@android:color/white"/>
+                        android:src="@drawable/ic_share"/>
 
-                </LinearLayout>
+                </com.google.android.flexbox.FlexboxLayout>
 
 
 

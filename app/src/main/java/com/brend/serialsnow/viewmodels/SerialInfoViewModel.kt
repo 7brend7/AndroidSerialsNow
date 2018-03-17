@@ -18,6 +18,7 @@ class SerialInfoViewModel(application: Application, private var id : String) : A
     var isLoading = ObservableField<Boolean>(false)
 
     var translation = MutableLiveData<String>()
+    var translationHash : HashMap<String, String>? = null
 
     var season = MutableLiveData<String>()
     var seasonsKey = ObservableField<Int>(null)

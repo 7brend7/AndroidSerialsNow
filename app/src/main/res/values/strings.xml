@@ -16,7 +16,14 @@
     <string name="year_lbl">Год:</string>
     <string name="country_lbl">Страна:</string>
     <string name="genre_lbl">Жанр:</string>
-    <string name="choose_translation_text">Выберите перевод:</string>
     <string name="season_key">%1$s сезон</string>
     <string name="episode_key">%1$s серия</string>
+    <string name="favorite_title">Избранное</string>
+    <string name="dialog_remove_title">Удаление</string>
+    <string name="favorite_remove_message">Удалить выбранные элементы из избранного?</string>
+    <string name="dialog_yes">Да</string>
+    <string name="dialog_no">Нет</string>
+    <string name="translation_lbl">Перевод:</string>
+    <string name="season_lbl">Сезон:</string>
+    <string name="episode_lbl">Серия:</string>
 </resources>

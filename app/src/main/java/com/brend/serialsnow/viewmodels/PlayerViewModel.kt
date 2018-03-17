@@ -8,5 +8,4 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
     var currentStream: String? = null
 
     var availableFormats = HashMap<String, String>()
-
 }

@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.support.constraint.ConstraintLayout
 import android.support.v4.app.NavUtils
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.app.AppCompatActivity
@@ -18,6 +19,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageButton
 import android.widget.Spinner
 import com.brend.serialsnow.R
+import com.brend.serialsnow.components.CustomizedChromesCastButton
 import com.brend.serialsnow.databinding.ActivityPlayerBinding
 import com.brend.serialsnow.viewmodels.PlayerViewModel
 import com.google.android.exoplayer2.*
@@ -48,11 +50,11 @@ class PlayerActivity : AppCompatActivity() {
         // at compile-time and do nothing on earlier devices.
         simple_player.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LOW_PROFILE or
-                        View.SYSTEM_UI_FLAG_FULLSCREEN or
-                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                View.SYSTEM_UI_FLAG_FULLSCREEN or
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
     }
     private val mShowPart2Runnable = Runnable {
         supportActionBar?.show()
@@ -69,7 +71,11 @@ class PlayerActivity : AppCompatActivity() {
 
     private var playbackPosition: Long = 0
 
-    lateinit private var videoTitle: String
+    private lateinit var videoTitle: String
+
+    private var qtyClickedFromCast: Boolean = false
+
+    private var casty: Casty? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,9 +96,13 @@ class PlayerActivity : AppCompatActivity() {
         binding.viewModel = viewModel
 
         (findViewById<ImageButton>(R.id.quality_btn)).setOnClickListener {
+            qtyClickedFromCast = false
+            changeFormatSpinnerPosition()
             (findViewById<Spinner>(R.id.format_spinner)).performClick()
             hide()
         }
+
+        val mediaRouteBtn = findViewById<MediaRouteButton>(R.id.media_route_button)
 
         (findViewById<Spinner>(R.id.format_spinner)).onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -104,8 +114,12 @@ class PlayerActivity : AppCompatActivity() {
                 val uri = viewModel.availableFormats[selectedValue]
                 if (uri != viewModel.currentStream) {
                     viewModel.currentStream = uri
-                    releasePlayer()
-                    initializePlayer()
+                    if (qtyClickedFromCast) {
+                        (mediaRouteBtn as CustomizedChromesCastButton).performClickOrigin()
+                    } else {
+                        releasePlayer()
+                        initializePlayer()
+                    }
                 }
                 hide()
             }
@@ -121,21 +135,19 @@ class PlayerActivity : AppCompatActivity() {
 
         DrawableCompat.setTint(drawable, Color.WHITE)
 
-        val mediaRouteBtn = findViewById<MediaRouteButton>(R.id.media_route_button)
         mediaRouteBtn.setRemoteIndicatorDrawable(drawable)
+        (mediaRouteBtn as CustomizedChromesCastButton).setClickListener {
+            qtyClickedFromCast = true
+            changeFormatSpinnerPosition()
+            (findViewById<Spinner>(R.id.format_spinner)).performClick()
+            hide()
+        }
 
-        val casty = Casty.create(this)
-        casty.setUpMediaRouteButton(mediaRouteBtn)
-        casty.setOnConnectChangeListener(object : Casty.OnConnectChangeListener {
+        casty = Casty.create(this)
+        casty?.setUpMediaRouteButton(mediaRouteBtn)
+        casty?.setOnConnectChangeListener(object : Casty.OnConnectChangeListener {
             override fun onConnected() {
-                val mediaData = MediaData.Builder(binding.viewModel?.currentStream)
-                        .setStreamType(MediaData.STREAM_TYPE_BUFFERED)
-                        .setContentType("videos/mp4")
-                        .setMediaType(MediaData.MEDIA_TYPE_TV_SHOW)
-                        .setTitle(videoTitle)
-                        .build()
-
-                casty.player.loadMediaAndPlay(mediaData)
+                playInMedia()
             }
 
             override fun onDisconnected() {}
@@ -143,6 +155,33 @@ class PlayerActivity : AppCompatActivity() {
         })
 
         binding.executePendingBindings()
+    }
+
+    private fun changeFormatSpinnerPosition() {
+        val formatSpinner = findViewById<Spinner>(R.id.format_spinner)
+        val mediaRouteBtn = findViewById<MediaRouteButton>(R.id.media_route_button)
+        val qualityBtn = findViewById<ImageButton>(R.id.quality_btn)
+
+        val formatLayoutParams = formatSpinner.layoutParams as ConstraintLayout.LayoutParams
+        if (qtyClickedFromCast) {
+            formatLayoutParams.endToStart = 0
+            formatLayoutParams.startToEnd = mediaRouteBtn.id
+        } else {
+            formatLayoutParams.startToEnd = 0
+            formatLayoutParams.endToStart = qualityBtn.id
+        }
+        formatSpinner.layoutParams = formatLayoutParams
+    }
+
+    fun playInMedia() {
+        val mediaData = MediaData.Builder(binding.viewModel?.currentStream)
+                .setStreamType(MediaData.STREAM_TYPE_BUFFERED)
+                .setContentType("videos/mp4")
+                .setMediaType(MediaData.MEDIA_TYPE_TV_SHOW)
+                .setTitle(videoTitle)
+                .build()
+
+        casty?.player?.loadMediaAndPlay(mediaData)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -186,7 +225,7 @@ class PlayerActivity : AppCompatActivity() {
         // Show the system bar
         simple_player.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         mVisible = true
 
         // Schedule a runnable to display UI elements after a delay

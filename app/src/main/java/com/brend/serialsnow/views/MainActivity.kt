@@ -2,10 +2,12 @@ package com.brend.serialsnow.views
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.widget.ImageButton
 import com.brend.serialsnow.R
 import com.brend.serialsnow.adapters.TabPagerAdapter
 import com.brend.serialsnow.databinding.ActivityMainBinding
@@ -36,8 +38,12 @@ class MainActivity : AppCompatActivity() {
 
         binding.viewModel = viewModel
 
-
         setSupportActionBar(findViewById(R.id.toolbar))
+
+        (findViewById<ImageButton>(R.id.favorite_action_button)).setOnClickListener {
+            val intent = Intent(this, FavoriteActivity::class.java)
+            startActivity(intent)
+        }
 
         binding.executePendingBindings()
     }

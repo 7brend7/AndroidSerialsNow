@@ -10,15 +10,17 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageButton
 import android.widget.TextView
 import com.brend.serialsnow.R
 import com.brend.serialsnow.databinding.ActivitySerialInfoBinding
+import com.brend.serialsnow.models.Favorites
+import com.brend.serialsnow.models.SerialInfo
 import com.brend.serialsnow.viewmodels.SerialInfoViewModel
 import com.brend.serialsnow.viewmodels.SerialInfoViewModelFactory
 import com.squareup.picasso.Picasso
@@ -33,6 +35,8 @@ class SerialInfoActivity : AppCompatActivity() {
 
     private lateinit var toolbarTitle: TextView
 
+    private lateinit var favorites: Favorites
+
     companion object {
         const val SPINNER_TYPE_SEASON: Int = 1
         const val SPINNER_TYPE_EPISODE: Int = 2
@@ -43,17 +47,22 @@ class SerialInfoActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_serial_info)
 
         toolbar = findViewById(R.id.toolbar)
+        toolbar.title = ""
         toolbarTitle = findViewById(R.id.toolbar_title)
 
         id = intent.extras.getString("id")
         toolbarTitle.text = intent.extras.getString("title")
-        toolbarTitle.gravity = Gravity.CENTER_VERTICAL or Gravity.RIGHT
+        //toolbarTitle.gravity = Gravity.CENTER_VERTICAL or Gravity.RIGHT
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val viewModel = ViewModelProviders.of(this, SerialInfoViewModelFactory(application, this, id ?: "")).get(SerialInfoViewModel::class.java)
+        val viewModel = ViewModelProviders.of(this, SerialInfoViewModelFactory(application, this, id
+                ?: "")).get(SerialInfoViewModel::class.java)
         binding.viewModel = viewModel
+
+
+        favorites = Favorites(this)
 
         viewModel.serialInfoResponse.observe(this, Observer {
             it?.let {
@@ -62,16 +71,22 @@ class SerialInfoActivity : AppCompatActivity() {
                 binding.serialInfo = it.serialInfo
 
                 val translations = ArrayList<String>()
+                val translationHash = HashMap<String, String>()
+
                 it.translation?.let {
                     for ((key, value) in it.iterator()) {
-                        translations.add(value.TRANSLATOR ?: "")
+                        val translator = value.TRANSLATOR ?: ""
+                        translations.add(translator)
+                        translationHash[translator] = key
                     }
                 }
+                viewModel.translationHash = translationHash
 
                 binding.translationSpinner.adapter = object : ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, translations) {
                     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
                         val view = super.getView(position, convertView, parent)
                         (view as TextView).setTextColor(Color.WHITE)
+
 
                         when (binding.root.tag) {
                             "sw600", "sw600-land" -> view.textSize = 18.0F
@@ -168,6 +183,29 @@ class SerialInfoActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        var existInFavorite = favorites.get(id as String) != null
+
+        val favoriteActionButton = findViewById<ImageButton>(R.id.favorite_action_button)
+
+        favoriteActionButton.setImageResource(if (existInFavorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border)
+
+        favoriteActionButton.setOnClickListener {
+
+            if (existInFavorite) {
+                favorites.remove(id as String)
+            } else {
+                val serialInfoToSave = SerialInfo()
+                serialInfoToSave.ID = id
+                serialInfoToSave.TITLE_RU = viewModel.serialInfoResponse.value?.serialInfo?.TITLE_RU
+                favorites.set(serialInfoToSave)
+            }
+
+            existInFavorite = !existInFavorite
+            favoriteActionButton.setImageResource(if (existInFavorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border)
+
+
+        }
+
         binding.executePendingBindings()
     }
 
@@ -197,8 +235,6 @@ class SerialInfoActivity : AppCompatActivity() {
                                         binding.viewModel?.translationToken?.set(value)
                                     }
                                 }
-
-                                break
                             }
                         }
 
